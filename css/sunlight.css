@@ -1,0 +1,14 @@
+.sunlight-line-number-margin {
+    background-color: transparent !important;
+    color: #AFB1C3 !important;
+    padding-right: 8px !important;
+    margin-right: 15px !important;
+    border-right: 3px solid #6CE26C !important;
+    width: 20px;
+}
+.sunlight-code-container {
+    border-color: transparent !important;
+}
+.sunlight-container pre {
+    font-size: 14px !important;
+}
