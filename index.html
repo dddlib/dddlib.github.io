@@ -1,13 +1,122 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>dddlib</title>
+    <script type="text/javascript" src="sunlight-1.22.0/sunlight-min.js"></script>
+    <script type="text/javascript" src="sunlight-1.22.0/lang/sunlight.csharp-min.js"></script>
+    <link rel="stylesheet" type="text/css" href="sunlight-1.22.0/themes/sunlight.default.css" />
+    <link rel="stylesheet" type="text/css" href="css/sunlight.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel='stylesheet' media='only screen and (max-width: 1399px)' href='css/index0700.css' />
+    <link rel='stylesheet' media='only screen and (min-width: 1400px) and (max-width: 2099px)' href='css/index1400.css' />
+    <link rel='stylesheet' media='only screen and (min-width: 2100px)' href='css/index2100.css' />
 </head>
 <body>
-dddlib
-<br/>
-A domain driven design library for .NET
+
+<header>
+    <h1>
+        <div class="crop">
+            <a href="http://dddlib.net">
+                <img src="https://raw.githubusercontent.com/dddlib/dddlib/dev/assets/dddlib_large.png" alt="dddlib" />
+            </a>
+        </div>
+    </h1>
+    <p class="title">A collection of domain driven design libraries for .NET designed to lower the barrier to entry for coding domain models</p>
+</header>
+
+<div id="container">
+    <div style="float: left; width: 700px;">
+        
+        <h2>Model</h2>
+        <p>To install dddlib, run the following command in the <a href="https://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
+        <code>Install-Package dddlib</code>
+        <p>Create a domain model, for example:</p>
+        <pre id="model" class="sunlight-highlight-csharp">
+public class Car : dddlib.AggregateRoot
+{
+    // used for reconstitution only
+    protected internal Car()
+    {
+    }
+
+    public Car(string registration)
+    {
+        // business logic goes here...
+        this.Apply(
+            new CarRegistered
+            {
+                Registration = registration
+            });
+    }
+
+    [dddlib.NaturalKey]
+    public string Registration { get; private set; }
+
+    private void Handle(CarRegistered @event)
+    {
+        this.Registration = @event.Registration;
+    }
+}
+
+public class CarRegistered
+{
+    public string Registration { get; set; }
+}
+        </pre>
+
+    </div>
+    <div style="float: left; width: 700px;">
+        
+        <h2>Persistence</h2>
+        <p>To install dddlib.Persistence, run the following command in the <a href="https://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
+        <code>Install-Package dddlib.Persistence</code>
+        <p>Persist the domain model, for example:</p>
+        <pre id="persistence" class="sunlight-highlight-csharp">
+// replace with a valid SQL Server connection string
+var connectionString = @"Server=someServer;Database=someDatabase;";
+
+var repository =
+    new dddlib.Persistence.SqlServer.SqlServerEventStoreRepository(
+        connectionString);
+
+var car = new Car("W807ASB");
+repository.Save(car);
+
+var sameCar = repository.Load&ltCar&gt(car.Registration);
+        </pre>
+
+    </div>
+    <div style="float: left; width: 700px;">
+
+        <h2>Event Dispatcher</h2>
+        <p>To install dddlib.Persistence.EventDispatcher, run the following command in the <a href="https://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
+        <code>Install-Package dddlib.Persistence.EventDispatcher</code>
+        <p>Dispatch the persisted events, for example:</p>
+        <pre id="eventDispatcher" class="sunlight-highlight-csharp">
+// replace with a valid SQL Server connection string
+var connectionString = @"Server=someServer;Database=someDatabase;";
+
+using (new dddlib.Persistence.EventDispatcher.SqlServer.SqlServerEventDispatcher(
+    connectionString,
+    (sequenceNumber, @event) =>
+    {
+        // action to perform upon dispatch...
+        Console.WriteLine(
+            "{0}: Processed {1}",
+            sequenceNumber,
+            @event.GetType());
+    }))
+{
+    // some blocking action
+    Console.ReadLine();
+}
+        </pre>
+    </div>
+    <br style="clear: left;">
+</div>
 </body>
+<script type="text/javascript">
+    Sunlight.highlightAll();
+</script>
 </html>

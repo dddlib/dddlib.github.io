@@ -1,0 +1,44 @@
+body {
+    color: #333;
+    font-family: "Segoe UI","Trebuchet MS",Verdana,Helvetica,Sans-Serif;
+    font-size: .85em;
+}
+h1, h2 { 
+    font-family: wf_segoe-ui_light,"Segoe UI Light","Segoe WP Light",wf_segoe-ui_normal,"Segoe UI",Segoe,"Segoe WP",Tahoma,Verdana,Arial,sans-serif;
+    font-size: 36px;
+}
+p.title {
+    margin-top: 0px;
+    font-size: 16px;
+}
+.crop {
+    height: 80px;
+    overflow: hidden;
+}
+.crop img {
+    width: 240px;
+    margin: -70px 0 0 0;
+}
+code::before {
+    content: "PM> ";
+}
+code {
+    background-color: #202020;
+    border: 2px solid silver;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #6e6e6e;
+    color: #e2e2e2;
+    display: block;
+    font: 1.0em 'andale mono','lucida console',monospace;
+    line-height: 1.0em;
+    overflow: auto;
+    padding: 12px;
+    margin-right: 100px;
+}
+header, div#container {
+    margin-left: auto;
+    margin-right: auto;
+}
+header {
+    border-bottom: 2px solid black;
+}
